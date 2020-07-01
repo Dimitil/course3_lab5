@@ -66,10 +66,7 @@ class Counter
 			  m_curCount--;
 			  delete this;
 		  }
-	  }
-
-	 
-
+	  }	
 	  friend class MyString;
 };
 
