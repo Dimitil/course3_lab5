@@ -33,7 +33,8 @@ public:
 
 	~MyString()
 	{
-		if (Counter::Head) delete m_pC;
+		m_pC->removeOwner();
+		m_pC = nullptr;
 	}
 
 
@@ -61,7 +62,7 @@ public:
 		other.m_pC = nullptr;
 		return *this;
 	}
-	//тест дальше
+	
 	MyString& operator=(const MyString& other)
 	{
 		if (this == &other)
@@ -73,5 +74,8 @@ public:
 		m_pC->addOwner();
 		return *this;
 	}
+
+	static void printAll();
+	static void changeRegister();
 };
 

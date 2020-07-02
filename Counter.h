@@ -32,27 +32,36 @@ class Counter
 	  }
 	  ~Counter()
 	  {
-		  if (!Head) return;
-
-		  if (this == Head)
+		  	//если списка нет, то мы сюда не попадём
+		  if (m_curCount == 1) //последний. он же head
 		  {
-			  Head = this->m_pNext;
+			  delete[] m_pStr;
+			  m_pStr = nullptr;
+			  Head = nullptr;
+			  m_curCount=0;
+			  return;
 		  }
-		  else
+
+		  if (this == Head)//попали на начало.
+		  {
+			  Head = this->m_pNext; //теперь начало - следующий			  
+		  }
+		  else              //попали не на начало и не на голову (в середине где-то)
 		  {
 			  Counter* p = Head;
 			  while (p->m_pNext != this)
 			  {
 				  p = p->m_pNext;
+
 			  }
-			  p->m_pNext = this->m_pNext;
-			  this->m_pNext = nullptr;
+			  p->m_pNext = m_pNext;
 		  }
-			  delete[] m_pStr;
-			  m_pStr = nullptr;
-			  m_nOwner = NULL;
-			  m_curCount--;
-		  
+		  m_pNext = nullptr;
+		  delete[] m_pStr;
+		  m_pStr = nullptr;
+		  m_curCount--;
+		  m_nOwner = 0;
+
 	  }
 	  void addOwner()
 	  {
@@ -63,7 +72,6 @@ class Counter
 		  m_nOwner--;
 		  if (!m_nOwner)
 		  {
-			  m_curCount--;
 			  delete this;
 		  }
 	  }	
