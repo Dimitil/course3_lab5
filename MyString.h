@@ -3,79 +3,70 @@
 
 class MyString
 {
-	Counter* m_pC;
-public:
-	MyString(const char* str)
-	{
-		m_pC = searchThisStr(str);
-		if(!m_pC) m_pC = new Counter(str);
-	}
+		Counter* m_pC;
 
-	MyString()
-	{
-		m_pC = nullptr;
-	}
-
-	Counter* searchThisStr(const char* str)
-	{
-		Counter* p = Counter::Head;
-		while (p != nullptr)//ищем эту строчку
+		Counter* searchThisStr(const char* str)
 		{
-			if (!strcmp(p->m_pStr, str))
+			Counter* p = Counter::Head;
+			while (p != nullptr)//ищем эту строчку
 			{
-				p->addOwner();           //нашли и стали пользоваться
-				return p;
+				if (!strcmp(p->m_pStr, str))
+				{
+					p->addOwner();           //нашли и стали пользоваться
+					return p;
+				}
+				p = p->m_pNext;
 			}
-			p = p->m_pNext;
+			return p;
 		}
-		return p;
-	}
 
-	~MyString()
-	{
-		m_pC->removeOwner();
-		m_pC = nullptr;
-	}
+	public:
+		MyString(const char* str) {
+			m_pC = searchThisStr(str);
+			if(!m_pC) m_pC = new Counter(str);
+		}
 
+		MyString()	{
+			m_pC = searchThisStr("");
+			if (!m_pC) m_pC = new Counter();
+		}
 
-	MyString(const MyString& other)
-	{
-		m_pC = other.m_pC;
-		other.m_pC->addOwner();
-	}
+		~MyString()	{
+			m_pC->removeOwner();
+			m_pC = nullptr;
+		}
 
-	MyString(MyString&& other)
-	{
+		MyString(const MyString& other)	{
+			m_pC = other.m_pC;
+			other.m_pC->addOwner();
+		}
 
-		m_pC = other.m_pC;
-		other.m_pC = nullptr;
-	}
+		MyString(MyString&& other)	{
+			m_pC = other.m_pC;
+			other.m_pC = nullptr;
+		}
 
-	MyString& operator=(MyString&& other)
-	{
-		if (this == &other)
-		{
+		MyString& operator=(MyString&& other){
+			if (this == &other)	{
+				return *this;
+			}
+			m_pC->removeOwner();
+			m_pC = other.m_pC;
+			other.m_pC = nullptr;
 			return *this;
 		}
-		m_pC->removeOwner();
-		m_pC = other.m_pC;
-		other.m_pC = nullptr;
-		return *this;
-	}
 	
-	MyString& operator=(const MyString& other)
-	{
-		if (this == &other)
-		{
+		MyString& operator=(const MyString& other)	{
+			if (this == &other)	{
+				return *this;
+			}
+			m_pC->removeOwner();
+			m_pC = other.m_pC;
+			m_pC->addOwner();
 			return *this;
 		}
-		m_pC->removeOwner();
-		m_pC = other.m_pC;
-		m_pC->addOwner();
-		return *this;
-	}
 
-	static void printAll();
-	static void changeRegister();
+		static void printAll();
+		static void changeRegister();
+		static void sort();
 };
-
