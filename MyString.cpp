@@ -2,6 +2,72 @@
 #include "MyString.h"
 #include <iostream>
 
+MyString::MyString()
+{
+	m_pC = searchThisStr("");
+	if (!m_pC) m_pC = new Counter("");
+}
+
+MyString::~MyString()
+{
+	m_pC->removeOwner();
+	m_pC = nullptr;
+}
+
+MyString::MyString(const char* str)
+{
+	m_pC = searchThisStr(str);
+	if (!m_pC) m_pC = new Counter(str);
+}
+
+Counter* MyString::searchThisStr(const char* str)
+{
+	Counter* p = Counter::Head;
+	while (p != nullptr)
+	{
+		if (!strcmp(p->m_pStr, str))
+		{
+			p->addOwner();           
+			return p;
+		}
+		p = p->m_pNext;
+	}
+	return p;
+}
+
+MyString::MyString(const MyString& other)
+{
+	m_pC = other.m_pC;
+	other.m_pC->addOwner();
+}
+
+MyString::MyString(MyString&& other) noexcept
+{
+	m_pC = other.m_pC;
+	other.m_pC = nullptr;
+}
+
+MyString& MyString::operator=(MyString&& other) noexcept
+{
+	if (this == &other) {
+		return *this;
+	}
+	m_pC = other.m_pC;
+	other.m_pC = nullptr;
+	return *this;
+}
+
+MyString& MyString::operator=(const MyString& other)
+{
+	if (this == &other) {
+		return *this;
+	}
+	m_pC->removeOwner();
+	m_pC = other.m_pC;
+	m_pC->addOwner();
+	return *this;
+}
+
 void MyString::printAll() {
 	Counter* p = Counter::Head;
 	size_t count = 1;

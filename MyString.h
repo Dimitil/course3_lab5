@@ -3,70 +3,29 @@
 
 class MyString
 {
-		Counter* m_pC;
+	Counter* m_pC;
 
-		Counter* searchThisStr(const char* str)
-		{
-			Counter* p = Counter::Head;
-			while (p != nullptr)//ищем эту строчку
-			{
-				if (!strcmp(p->m_pStr, str))
-				{
-					p->addOwner();           //нашли и стали пользоваться
-					return p;
-				}
-				p = p->m_pNext;
-			}
-			return p;
-		}
+	Counter* searchThisStr(const char* str);
+		
 
-	public:
-		MyString(const char* str) {
-			m_pC = searchThisStr(str);
-			if(!m_pC) m_pC = new Counter(str);
-		}
+public:
+	MyString(const char* str);
 
-		MyString()	{
-			m_pC = searchThisStr("");
-			if (!m_pC) m_pC = new Counter();
-		}
+	MyString();
 
-		~MyString()	{
-			m_pC->removeOwner();
-			m_pC = nullptr;
-		}
+	~MyString();
 
-		MyString(const MyString& other)	{
-			m_pC = other.m_pC;
-			other.m_pC->addOwner();
-		}
+	MyString(const MyString& other);
 
-		MyString(MyString&& other)	{
-			m_pC = other.m_pC;
-			other.m_pC = nullptr;
-		}
+	MyString(MyString&& other) noexcept;
 
-		MyString& operator=(MyString&& other){
-			if (this == &other)	{
-				return *this;
-			}
-			m_pC->removeOwner();
-			m_pC = other.m_pC;
-			other.m_pC = nullptr;
-			return *this;
-		}
+	MyString& operator=(MyString&& other) noexcept;
 	
-		MyString& operator=(const MyString& other)	{
-			if (this == &other)	{
-				return *this;
-			}
-			m_pC->removeOwner();
-			m_pC = other.m_pC;
-			m_pC->addOwner();
-			return *this;
-		}
+	MyString& operator=(const MyString& other);
 
-		static void printAll();
-		static void changeRegister();
-		static void sort();
+	static void printAll();
+
+	static void changeRegister();
+
+	static void sort();
 };
