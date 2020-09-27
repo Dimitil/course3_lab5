@@ -4,35 +4,26 @@
 
 MyString::MyString()
 {
-	m_pC = searchThisStr("");
-	if (!m_pC) m_pC = new Counter("");
+	m_pC = nullptr; 
 }
 
 MyString::~MyString()
 {
-	m_pC->removeOwner();
+	if (m_pC)
+	{
+		m_pC->removeOwner();	//исправлено
+	}
 	m_pC = nullptr;
 }
 
 MyString::MyString(const char* str)
 {
-	m_pC = searchThisStr(str);
-	if (!m_pC) m_pC = new Counter(str);
+	m_pC = searchThisStr(str);			//исправлено
 }
 
 Counter* MyString::searchThisStr(const char* str)
-{
-	Counter* p = Counter::Head;
-	while (p != nullptr)
-	{
-		if (!strcmp(p->m_pStr, str))
-		{
-			p->addOwner();           
-			return p;
-		}
-		p = p->m_pNext;
-	}
-	return p;
+{													//исправлено 
+	return Counter::searchThisStr(str);
 }
 
 MyString::MyString(const MyString& other)
@@ -52,6 +43,7 @@ MyString& MyString::operator=(MyString&& other) noexcept
 	if (this == &other) {
 		return *this;
 	}
+	m_pC->removeOwner();			//исправлено
 	m_pC = other.m_pC;
 	other.m_pC = nullptr;
 	return *this;
@@ -69,26 +61,12 @@ MyString& MyString::operator=(const MyString& other)
 }
 
 void MyString::printAll() {
-	Counter* p = Counter::Head;
-	size_t count = 1;
-	while (p != nullptr){
-		for (int i = 0; i < p->m_nOwner; i++) {
-			std::cout << '\n' << count << ". " << p->m_pStr << '\n';
-			count++;
-		}
-		p = p->m_pNext;
-	}
+	Counter::printAll(); //исправлено
 }
 
 void MyString::changeRegister()
 {
-	Counter* p = Counter::Head;
-	while (p != nullptr) {
-		for (int i = 0; i < strlen(p->m_pStr); i++)	{
-			if (isalpha(p->m_pStr[i])) { (p->m_pStr[i]) ^= 0x20; }
-		}
-		p = p->m_pNext;
-	}
+	Counter::changeRegister();
 }
 
 void MyString::sort() {

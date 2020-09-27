@@ -2,7 +2,7 @@
 #include "MyString.h"
 int main()
 {
-	{MyString Ar[] = { "ddd", "aaa", "aaa" };
+	{MyString Ar[] = { "ddd", "aaa", "aaa" , MyString(), MyString()};
 
 	MyString::changeRegister();
 	MyString::sort();
