@@ -18,13 +18,13 @@ MyString::~MyString()
 
 MyString::MyString(const char* str)
 {
-	m_pC = searchThisStr(str);			//исправлено
+	m_pC = Counter::searchThisStr(str);//searchThisStr(str);			//исправлено
 }
 
-Counter* MyString::searchThisStr(const char* str)
-{													//исправлено 
-	return Counter::searchThisStr(str);
-}
+//Counter* MyString::searchThisStr(const char* str)
+//{													//исправлено 
+//	return Counter::searchThisStr(str);
+//}
 
 MyString::MyString(const MyString& other)
 {
@@ -40,7 +40,7 @@ MyString::MyString(MyString&& other) noexcept
 
 MyString& MyString::operator=(MyString&& other) noexcept
 {
-	if (this == &other) {
+	if (m_pC == other.m_pC) {
 		return *this;
 	}
 	m_pC->removeOwner();			//исправлено
@@ -51,7 +51,7 @@ MyString& MyString::operator=(MyString&& other) noexcept
 
 MyString& MyString::operator=(const MyString& other)
 {
-	if (this == &other) {
+	if (m_pC == other.m_pC) {
 		return *this;
 	}
 	m_pC->removeOwner();
@@ -69,7 +69,7 @@ void MyString::changeRegister()
 	Counter::changeRegister();
 }
 
-void MyString::sort() {
+void MyString::sort() {//NULLPTR
     Counter* a, * b, * p, * h = NULL;
 
     for (Counter* i = Counter::Head; i != NULL; ) {
